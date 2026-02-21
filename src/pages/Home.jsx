@@ -1,5 +1,5 @@
 import { products } from "../products";
-import ProductCard from "../components/productCard";
+import ProductCard from "../components/ProductCard";
 
 const Home = () => {
   return (
