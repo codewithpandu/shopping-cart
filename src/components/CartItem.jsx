@@ -19,7 +19,7 @@ const CartItem = (props) => {
     dispatch(
       changeQuantity({
         productId: productId,
-        quantity: quantity - 1 < 1 ? 1 : quantity - 1,
+        quantity: quantity - 1,
       }),
     );
   };
