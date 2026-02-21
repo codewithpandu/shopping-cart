@@ -3,11 +3,18 @@ import { useState, useEffect } from "react";
 import { products } from "../products";
 import { useNavigate } from "react-router-dom";
 import { formatRupiah } from "../utils/RupiahCurrency";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../stores/cart";
 
 const Detail = () => {
   const { slug } = useParams();
   const [detail, setDetail] = useState({});
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const carts = useSelector((store) => store.cart.items);
+  console.log(carts);
 
   useEffect(() => {
     // cari produk berdasarkan slug
@@ -18,6 +25,18 @@ const Detail = () => {
       navigate("/");
     }
   }, [slug]);
+
+  const handleMinusQuantity = () => {
+    setQuantity(quantity - 1 < 1 ? 1 : quantity - 1);
+  };
+
+  const handlePlusQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ productId: detail.id, quantity }));
+  };
   return (
     <div className="container py-24">
       <h1 className="text-3xl md:text-4xl pb-5">Product Detail</h1>
@@ -36,15 +55,24 @@ const Detail = () => {
           </span>
           <div className="flex gap-5 mt-2">
             <div className="flex gap-3 justify-center items-center">
-              <button className="mt-2 bg-blue-500 text-white py-2 px-3 font-bold rounded-lg hover:bg-blue-600 cursor-pointer">
+              <button
+                className="mt-2 bg-blue-500 text-white py-2 px-3 font-bold rounded-lg hover:bg-blue-600 cursor-pointer"
+                onClick={handleMinusQuantity}
+              >
                 -
               </button>
-              <span className="text-lg font-bold">1</span>
-              <button className="mt-2 bg-blue-500 text-white py-2 px-3 font-bold rounded-lg hover:bg-blue-600 cursor-pointer">
+              <span className="text-lg font-bold">{quantity}</span>
+              <button
+                className="mt-2 bg-blue-500 text-white py-2 px-3 font-bold rounded-lg hover:bg-blue-600 cursor-pointer"
+                onClick={handlePlusQuantity}
+              >
                 +
               </button>
             </div>
-            <button className="mt-2 bg-blue-500 text-white font-semibold px-3 py-2 hover:bg-blue-600 cursor-pointer rounded-lg">
+            <button
+              className="mt-2 bg-blue-500 text-white font-semibold px-3 py-2 hover:bg-blue-600 cursor-pointer rounded-lg"
+              onClick={handleAddToCart}
+            >
               Add To Cart
             </button>
           </div>
